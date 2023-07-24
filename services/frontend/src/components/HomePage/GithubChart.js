@@ -5,24 +5,10 @@ const url = "https://dpg.gg/test/calendar.json";
 
 export default function GithubChart() {
   const [data, setData] = useState(null);
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const [selectedDate, setSelectedDate] = useState([]);
+  const [selectedBlock, setSelectedBlock] = useState(null);
 
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-  // Fetching data
+  //fetching data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,28 +21,44 @@ export default function GithubChart() {
 
     fetchData();
   }, []);
+
   if (!data) {
     return <div>...</div>;
   }
 
-  const keysArray = Object.keys(data);
-  const valuesArray = Object.values(data);
-
-  console.log(valuesArray);
-  const getColorIntensity = item => {
-    if (item <= 1) {
+  //separating by color
+  const getColor = item => {
+    if (item <= 0) {
       return "#EDEDED";
-    } else if (item >= 1 && item <= 9) {
+    } else if (item <= 9) {
       return "#ACD5F2";
-    } else if (item >= 10 && item <= 19) {
+    } else if (item <= 19) {
       return "#7FA8C9";
-    } else if (item >= 20 && item <= 29) {
+    } else if (item <= 29) {
       return "#527BA0";
-    } else if (item >= 30 && item <= 40) {
+    } else if (item => 30) {
       return "#254E77";
     }
   };
 
+  //counting from and to date
+  const startDate = new Date("2022-05-31");
+  const dateArray = [];
+  for (let i = 0; i < 357; i++) {
+    const currentDate = new Date(startDate);
+    currentDate.setDate(startDate.getDate() + i);
+    const dateString = currentDate.toISOString().slice(0, 10);
+    dateArray.push(dateString);
+  }
+
+  //show selected data
+  const handleGetInfo = id => {
+    setSelectedDate([]);
+    const value = data[id];
+    setSelectedDate([{ date: id, value }]);
+    setSelectedBlock(id);
+  };
+  // console.log(selectedDate);
   return (
     <main className="main">
       <ul className="day">
@@ -64,32 +66,49 @@ export default function GithubChart() {
         <li>Wen</li>
         <li>Fri</li>
       </ul>
-      <div className="container ">
+
+      <div className="container">
         <ul className="month">
-          <li>Jan</li>
-          <li>Feb</li>
-          <li>March</li>
+          <li>Apr</li>
           <li>May</li>
           <li>June</li>
-          <li>Jule</li>
+          <li>July</li>
           <li>Aug</li>
           <li>Sep</li>
           <li>Oct</li>
           <li>Nov</li>
           <li>Dec</li>
+          <li>Jan</li>
+          <li>Feb</li>
+          <li>March</li>
         </ul>
+
         <div className="chart">
-          {keysArray.map((key, index) => (
+          {dateArray.map((id, index) => (
             <div
               key={index}
-              id={key}
-              className="block"
+              id={id}
+              className={`block ${selectedBlock === id ? "selected" : ""}`}
+              onClick={() => handleGetInfo(id)}
               style={{
-                backgroundColor: getColorIntensity(valuesArray[index]),
+                backgroundColor: getColor(data[id] || 0),
               }}
             />
           ))}
         </div>
+
+        {selectedDate.length > 0 && selectedBlock && (
+          <div className="modal">
+            {selectedDate.map(item => (
+              <div className="modal-content" key={item.date}>
+                <span className="contribution">
+                  {item.value ?? 0} contributions
+                </span>
+                <span className="date">{item.date}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
