@@ -1,28 +1,16 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-const url = "https://dpg.gg/test/calendar.json";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedDate } from "../../redux/slices/selectedSlice";
+import useDataFetching from "../../services/Instance";
 
 export default function GithubChart() {
-  const [data, setData] = useState(null);
-  const [selectedDate, setSelectedDate] = useState([]);
-  const [selectedBlock, setSelectedBlock] = useState(null);
+  const dispatch = useDispatch();
+  const { data, loading, error } = useDataFetching();
+  const selectedDate = useSelector(state => state.selected.selectedDate);
+  const selectedBlock = useSelector(state => state.selected.selectedBlock);
 
-  //fetching data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(url);
-        setData(response.data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (!data) {
+  if (loading) {
+    if (error) console.log(error);
     return <div>...</div>;
   }
 
@@ -36,12 +24,12 @@ export default function GithubChart() {
       return "#7FA8C9";
     } else if (item <= 29) {
       return "#527BA0";
-    } else if (item => 30) {
+    } else if (item >= 30) {
       return "#254E77";
     }
   };
 
-  //counting from and to date
+  //counting ("from" and "to") date
   const startDate = new Date("2022-05-31");
   const dateArray = [];
   for (let i = 0; i < 357; i++) {
@@ -53,10 +41,9 @@ export default function GithubChart() {
 
   //show selected data
   const handleGetInfo = id => {
-    setSelectedDate([]);
+    // setSelectedDate([]);
     const value = data[id];
-    setSelectedDate([{ date: id, value }]);
-    setSelectedBlock(id);
+    dispatch(setSelectedDate({ date: id, value }));
   };
   // console.log(selectedDate);
   return (
@@ -97,16 +84,14 @@ export default function GithubChart() {
           ))}
         </div>
 
-        {selectedDate.length > 0 && selectedBlock && (
+        {selectedDate && (
           <div className="modal">
-            {selectedDate.map(item => (
-              <div className="modal-content" key={item.date}>
-                <span className="contribution">
-                  {item.value ?? 0} contributions
-                </span>
-                <span className="date">{item.date}</span>
-              </div>
-            ))}
+            <div className="modal-content" key={selectedDate.date}>
+              <span className="contribution">
+                {selectedDate.value ?? 0} contributions
+              </span>
+              <span className="date">{selectedDate.date}</span>
+            </div>
           </div>
         )}
       </div>
