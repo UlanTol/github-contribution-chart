@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/github-contribution-chart/static/css/main.c89f011c.css",
+    "main.js": "/github-contribution-chart/static/js/main.2b985dc3.js",
+    "index.html": "/github-contribution-chart/index.html",
+    "main.c89f011c.css.map": "/github-contribution-chart/static/css/main.c89f011c.css.map",
+    "main.2b985dc3.js.map": "/github-contribution-chart/static/js/main.2b985dc3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c89f011c.css",
+    "static/js/main.2b985dc3.js"
+  ]
+}
