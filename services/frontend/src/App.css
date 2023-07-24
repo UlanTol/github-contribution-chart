@@ -1,0 +1,46 @@
+html {
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+
+  overflow-x: hidden;
+
+  font-family: "Open Sans", sans-serif;
+  color: var(--color-black);
+}
+
+.main {
+  display: flex;
+}
+
+.chart {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 140px;
+  width: 800px;
+}
+
+.block {
+  height: 20px;
+  width: 20px;
+  margin: 1px;
+}
+
+.month {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  justify-content: space-between;
+}
+.day {
+  margin-right: 3em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  list-style: none;
+  width: 20px;
+}

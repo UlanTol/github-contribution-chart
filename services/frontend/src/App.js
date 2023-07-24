@@ -1,7 +1,8 @@
 import "./App.css";
+import GithubChart from "./components/HomePage/GithubChart";
 
 function App() {
-  return <div className="App"></div>;
+  return <GithubChart />;
 }
 
 export default App;
